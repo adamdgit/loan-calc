@@ -1,0 +1,59 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  background-color: white;
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+  box-shadow: 3px 3px 15px 0 #bbb;
+}
+
+.calculator, .results {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 2rem;
+  text-align: center;
+}
+
+.calc-btn {
+  justify-self: center;
+  width: 180px;
+  height: 40px;
+  background: rgb(51, 150, 231);
+  color: white;
+  font-size: 1.2rem;
+  border-radius: 5px;
+}
+
+.calc-btn:hover {
+  background: #e31bbc;
+}
+
+.input-wrap {
+  display: grid;
+  justify-items: center;
+}
+
+.calculator input {
+  width: 100px;
+  height: 30px;
+  border: 1px solid #bbb;
+  padding-left: 10px;
+}
+
+.calculator label {
+  display: block;
+  height: 30px;
+}
+
+.calculator select {
+  border: 1px solid #bbb;
+}
+
+.smalltext {
+  font-size: .8rem;
+}
+
+.recharts-wrapper {
+  margin: 0 auto;
+}
