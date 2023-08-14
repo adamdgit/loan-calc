@@ -57,3 +57,19 @@
 .recharts-wrapper {
   margin: 0 auto;
 }
+
+@media (max-width: 600px) {
+  
+  .container {
+    padding: 1rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .calculator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+}
