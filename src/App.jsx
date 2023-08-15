@@ -21,6 +21,7 @@ function App() {
 
   // when user changes payment frequency, re-calculate payments
   useEffect(() => {
+    if (rate === 0) return
     calculateLoan();
   }, [frequencyWeeks])
 
