@@ -107,6 +107,12 @@ function App() {
               <Errortip error={interestError}/>
             </div>
             <div className='input-wrap'>
+              <label htmlFor='length' >Length of Loan: <span className='smalltext'>(years)</span></label>
+              <input style={loanError ? {border: '1px solid red'} : {}} name='length' type='number' 
+                onChange={(e) => {setLoanLength(Math.round(e.target.value)), setLoanError(false)}}/>
+              <Errortip error={loanError}/>
+            </div>
+            <div className='input-wrap'>
               <label htmlFor='frequency'>Payment Frequency:</label>
               <select name='length' onChange={(e) => setFrequencyWeeks(e.target.value)}>
                 <option value='1'>Weekly</option>
@@ -115,12 +121,6 @@ function App() {
                 <option value='13'>Quarterly</option>
                 <option value='52'>Yearly</option>
               </select>
-            </div>
-            <div className='input-wrap'>
-              <label htmlFor='length' >Length of Loan: <span className='smalltext'>(years)</span></label>
-              <input style={loanError ? {border: '1px solid red'} : {}} name='length' type='number' 
-                onChange={(e) => {setLoanLength(Math.round(e.target.value)), setLoanError(false)}}/>
-              <Errortip error={loanError}/>
             </div>
           </div>
           <button className='calc-btn' onClick={() => calculateLoan()}>Calculate</button>
