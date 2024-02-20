@@ -2,6 +2,16 @@ import { useEffect, useState } from 'react'
 import { PieChart, Pie, Legend, Cell } from 'recharts';
 import './App.css'
 import {roundNumber} from './utils/roundNumber'
+import Errortip from "./components/Errortip"
+
+function formatCurrency(amount) {
+  // Convert the number to a string and split it into whole and decimal parts
+  const parts = amount.toString().split('.');
+  // Add commas to the whole part of the number
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  // Return the formatted currency string with the Australian dollar sign
+  return '$' + parts.join('.');
+}
 
 function App() {
   const [frequencyWeeks, setFrequencyWeeks] = useState(1)
@@ -11,6 +21,10 @@ function App() {
   const [frequencyDue, setFrequencyDue] = useState(0)
   const [totalInterest, SetTotalInterest] = useState(0)
   const [totalDue, setTotalDue] = useState(0)
+
+  const [borrowError, setBorrowError] = useState(false)
+  const [interestError, setInterestError] = useState(false)
+  const [loanError, setLoanError] = useState(false)
 
   const data = [
     { name: 'Borrowed', value: roundNumber((borrowed / totalDue) * 100, 3) },
@@ -26,45 +40,47 @@ function App() {
   }, [frequencyWeeks])
 
   function calculateLoan() {
-    // P = a ÷ { [ (1 + r) n ] - 1 } ÷ [ r (1 + r) n]
-    // P is your monthly payment
-    // a is your principal amount
-    // r is your interest rate (divided by 12 to get months or 52 for weeks)
-    // n is the total number of months or weeks in the loan term
+    if (!borrowed) setBorrowError(true)
+    else setBorrowError(false)
+    if (!rate) setInterestError(true)
+    else setInterestError(false)
+    if (!loanLength) setLoanError(true)
+    else setLoanError(false)
 
-    // rate / 100 / months * borrowed / (rate / 100 / months) ** -number of monthly payments * months
-    // ((6.5 / 100 / 12) * 200000) / (1 - ((1 + (6.5 / 100 / 12)) ^ (-30 * 12)))
-    let loanDurationWeeks = 52 * loanLength;
-    let weeklyLoanRate = rate / 52;
+    // Convert annual interest rate to monthly interest rate
+    const monthlyInterestRate = rate / 12 / 100;
 
-    let x = (weeklyLoanRate + 1) ** loanDurationWeeks -1;
-    let y = (weeklyLoanRate + 1) ** loanDurationWeeks * weeklyLoanRate;
-    let z = x / y;
+    // Convert loan term in years to total number of monthly payments
+    const numberOfPayments = loanLength * 12;
 
-    let weeklyPayment = borrowed / z;
-    let totalPayment = weeklyPayment * loanDurationWeeks;
+    // Calculate the monthly payment using the provided formula
+    const monthlyPayment = borrowed * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments) /
+        (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+
+    let weeklyPayment = monthlyPayment / 4;
+    let totalPayment = monthlyPayment * 12 * loanLength;
     let finalInterest = totalPayment - borrowed;
 
     switch (parseInt(frequencyWeeks)) {
       case 1: 
-        setFrequencyDue(parseFloat(weeklyPayment).toFixed(2));
+        setFrequencyDue(Math.round(weeklyPayment));
         break;
       case 2: 
-        setFrequencyDue(parseFloat(weeklyPayment * 2).toFixed(2));
+        setFrequencyDue(Math.round(weeklyPayment * 2));
         break;
       case 4: 
-        setFrequencyDue(parseFloat(weeklyPayment * 4).toFixed(2));
+        setFrequencyDue(Math.round(weeklyPayment * 4));
         break;
       case 13: 
-        setFrequencyDue(parseFloat(weeklyPayment * 13).toFixed(2));
+        setFrequencyDue(Math.round(weeklyPayment * 13));
         break;
       case 52:
-        setFrequencyDue(parseFloat(weeklyPayment * 52).toFixed(2));
+        setFrequencyDue(Math.round(weeklyPayment * 52));
         break;
     }
 
-    setTotalDue(parseFloat(totalPayment).toFixed(2));
-    SetTotalInterest(parseFloat(finalInterest).toFixed(2));
+    setTotalDue(Math.round(totalPayment));
+    SetTotalInterest(Math.round(finalInterest));
   }
 
   return (
@@ -80,11 +96,15 @@ function App() {
           <div className='calculator'>
             <div className='input-wrap'>
               <label htmlFor='borrow'>Amount Borrowed:</label>
-              <input name='borrow' type='text' onChange={(e) => setBorrowed(e.target.value)}/>
+              <input style={borrowError ? {border: '1px solid red'} : {}} name='borrow' type='number' 
+                onChange={(e) => {setBorrowed(e.target.value), setBorrowError(false)}}/>
+              <Errortip error={borrowError}/>
             </div>
             <div className='input-wrap'>
               <label htmlFor='rate'>Interest Rate:</label>
-              <input name='rate' type='text' onChange={(e) => setRate(parseInt(e.target.value) / 100)}/>
+              <input style={interestError ? {border: '1px solid red'} : {}} name='rate' type='number' 
+                onChange={(e) => {setRate(e.target.value), setInterestError(false)}}/>
+              <Errortip error={interestError}/>
             </div>
             <div className='input-wrap'>
               <label htmlFor='frequency'>Payment Frequency:</label>
@@ -98,7 +118,9 @@ function App() {
             </div>
             <div className='input-wrap'>
               <label htmlFor='length' >Length of Loan: <span className='smalltext'>(years)</span></label>
-              <input name='length' onChange={(e) => setLoanLength(Math.round(e.target.value))}/>
+              <input style={loanError ? {border: '1px solid red'} : {}} name='length' type='number' 
+                onChange={(e) => {setLoanLength(Math.round(e.target.value)), setLoanError(false)}}/>
+              <Errortip error={loanError}/>
             </div>
           </div>
           <button className='calc-btn' onClick={() => calculateLoan()}>Calculate</button>
@@ -106,14 +128,17 @@ function App() {
 
 
       <div className='container'>
-        <h3>Repayments:</h3>
+        <h3>Repayments for borrowing: {formatCurrency(borrowed)}</h3>
         <div className='results'>
-          <p><b>Total Payment:</b> ${totalDue}</p>
-          <p><b>Total Interest:</b> ${totalInterest}</p>
+          <p><b>Total Payment: </b>{formatCurrency(totalDue)}</p>
+          <p><b>Total Interest: </b>{formatCurrency(totalInterest)}</p>
           <p>
             <b>
-            {frequencyWeeks == 1 ? 'Weekly ' : frequencyWeeks == 2 ? 'Fortnightly ' : frequencyWeeks == 4 ? 'Monthly ' : frequencyWeeks == 52 ? 'Yearly ' : 'Quarterly '} 
-            Payment: </b>${frequencyDue}
+              {frequencyWeeks == 1 ? 'Weekly ' : frequencyWeeks == 2 ? 'Fortnightly ' 
+              : frequencyWeeks == 4 ? 'Monthly ' : frequencyWeeks == 52 ? 'Yearly ' : 'Quarterly '} 
+              Payment: 
+            </b>
+            {formatCurrency(frequencyDue)}
           </p>
         </div>
         
