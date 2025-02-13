@@ -1,44 +1,76 @@
 .container {
-  max-width: 800px;
-  margin: 0 auto 2rem auto;
-  background-color: white;
-  padding: 2rem;
+  width: fit-content;
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  padding: 2rem 3rem;
   display: grid;
-  gap: 2rem;
-  box-shadow: 3px 3px 15px 0 #bbb;
+  gap: .7rem;
+  border-radius: 6px;
+  box-shadow: 0px 4px 15px 0 #ddd;
+  border: 1px solid #ddd;
+  transition: 150ms ease-in-out;
+}
+.container:hover {
+  box-shadow: 0px 4px 15px 0 #bbb;
 }
 
-.calculator, .results {
+.calculator {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.results {
+  display: grid;
+  align-items: center;
+  gap: .7rem;
+}
+
+.result-text {
   display: flex;
-  justify-content: space-evenly;
-  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+}
+
+.result-main {
+  font-size: 1.5rem;
+  display: grid;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
-.calc-btn {
-  justify-self: center;
-  width: 180px;
-  height: 40px;
-  background: rgb(51, 150, 231);
-  color: white;
-  font-size: 1.2rem;
-  border-radius: 5px;
-}
-
-.calc-btn:hover {
-  background: #e31bbc;
+.freq {
+  width: 100px;
+  height: 35px;
+  border: 1px solid #ccc;
 }
 
 .input-wrap {
   display: grid;
-  justify-items: center;
+  grid-template-columns: 150px 40px 1fr;
+  align-items: center;
+  position: relative;
+}
+
+.input-wrap span {
+  display: grid;
+  justify-content: end;
+  margin-right: 10px;
 }
 
 .calculator input {
-  width: 100px;
-  height: 30px;
-  border: 1px solid #bbb;
+  width: 200px;
+  height: 45px;
+  border: 1px solid #ccc;
   padding-left: 10px;
+  transition: 150ms ease-in-out;
+}
+
+.calculator input:hover {
+  border: 1px solid #666;
 }
 
 .calculator label {
@@ -47,15 +79,75 @@
 }
 
 .calculator select {
+  width: 200px;
+  height: 45px;
   border: 1px solid #bbb;
 }
 
 .smalltext {
-  font-size: .8rem;
+  font-size: .9rem;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.recharts-wrapper {
+.arrow-left {
+  position: absolute;
+  left: -5px;
+  top: 8px;
+  width: 0; 
+  height: 0; 
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; 
+  
+  border-right:10px solid rgb(230, 55, 55); 
+}
+
+.info-wrap {
+  display: grid;
+  justify-items: center;
+  width: fit-content;
   margin: 0 auto;
+  padding: 2rem 3rem;
+  gap: 2rem;
+}
+
+.chart {
+  position: relative;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 10px;
+  width: 200px;
+}
+
+.bar1, .bar2 {
+  text-align: center;
+  color: white;
+  width: 45px;
+}
+
+.bar1 {
+  background-color: rgb(245, 51, 125);
+} 
+.bar2 {
+  background-color: rgb(33, 150, 245);
+}
+
+.chart-tooltip1, .chart-tooltip2 {
+  color: white;
+  position: absolute;
+  padding: .4rem;
+  border-radius: 4px;
+  width: 120px;
+  text-align: center;
+  left: 100%;
+}
+.chart-tooltip1 {
+  bottom: 50px;
+  background-color: rgb(245, 51, 125);
+}
+.chart-tooltip2 {
+  background-color: rgb(33, 150, 245);
 }
 
 @media (max-width: 600px) {

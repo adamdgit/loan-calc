@@ -11,15 +11,15 @@ html { scroll-behavior: smooth; }
 button { cursor: pointer; }
 
 body {
-  background-color: #efefef;
+  background-color: #fff;
   color: #111;
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2.4rem;
 }
 
-h2, h3 {
+h2 {
   text-align: center;
 }
 
@@ -28,7 +28,7 @@ header {
   justify-content: center;
   align-items: center;
   background: radial-gradient(circle at 10% 0%, rgb(51, 150, 231), rgb(54, 65, 218));
-  height: 200px;
+  height: 100px;
   color: white;
 }
 
