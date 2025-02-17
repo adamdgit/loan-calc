@@ -9,12 +9,12 @@ export default function ChartWrapper({ percent1, percent2 }) {
   ];
 
   return (
-    <div style={{ width: "350px", height: "250px" }}>
+    <div className='chart-wrap'>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          barCategoryGap="20%" // Adjust the gap between bars to create two columns
+          margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
+          barCategoryGap="20%"
         >
           <XAxis dataKey="name" />
           <YAxis domain={[0, 100]} />

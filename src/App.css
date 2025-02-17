@@ -150,18 +150,48 @@
   background-color: rgb(33, 150, 245);
 }
 
+.chart-wrap {
+  width: 350px;
+  height: 250px;
+}
+
 @media (max-width: 600px) {
-  
+
   .container {
+    margin-top: 1rem;
     padding: 1rem;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: .7rem;
   }
 
-  .calculator {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+  .input-wrap {
+    grid-template-columns: auto 1fr;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  .input-wrap label {
+    grid-column: span 2;
+  }
+
+  .input-wrap input {
+    grid-row: 2;
+  }
+  .input-wrap span {
+    grid-row: 2;
+  }
+
+  .info-wrap {
+    padding: unset;
+  }
+
+  .results {
+    margin-top: 1rem;
+    gap: .5rem;
+  }
+
+  .chart-wrap {
+    width: 300px;
+    height: 220px;
   }
 
 }
